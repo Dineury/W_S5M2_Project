@@ -72,14 +72,15 @@ function moduleProject2() {
 
   document.addEventListener('keydown', evt => {
     // 👉 TASK 3 - Use the arrow keys to highlight a new square 👈
-    let isUp = keys.up
-    let isDown = keys.down
-    let isLeft = keys.left
-    let isRight = keys.right
+    let isUp = evt.key === keys.up
+    let isDown = evt.key === keys.down
+    let isLeft = evt.key === keys.left
+    let isRight = evt.key === keys.right
+    let isSpaceBar = evt.key === keys.space
 
  let targeted = document.querySelector(".targeted")
 
-    if(evt.key === isUp){
+    if(isUp){
       if(targeted.parentElement.previousElementSibling){
         let idx = Array.from(targeted.parentElement.children).indexOf(targeted);
         targeted.classList.remove("targeted");
@@ -87,21 +88,21 @@ function moduleProject2() {
         }
   
     }
-    else if (evt.key === isDown){
+    else if (isDown){
       if(targeted.parentElement.nextElementSibling){
       let idx = Array.from(targeted.parentElement.children).indexOf(targeted);
       targeted.classList.remove("targeted");
       targeted.parentElement.nextElementSibling.children[idx].classList.add("targeted");
       }
     } 
-    else if(evt.key === isLeft){
+    else if(isLeft){
 
   if(targeted.previousElementSibling){
     targeted.classList.remove("targeted");
     targeted.previousElementSibling.classList.add('targeted');
   }
     }
-    else if (evt.key == isRight){
+    else if (isRight){
        
         if(targeted.nextElementSibling){
           targeted.classList.remove("targeted");
@@ -109,8 +110,32 @@ function moduleProject2() {
         }
     }
     // 👉 TASK 4 - Use the space bar to exterminate a mosquito 👈
+    else if(isSpaceBar){
+      let mosquito = targeted.firstChild
+     
+     if(mosquito && mosquito.dataset.status === 'alive'){
+      mosquito.dataset.status = 'dead'
+      mosquito.parentElement.style.backgroundColor = 'red'
+     }
+     // 👉 TASK 5 - End the game 👈
 
-    // 👉 TASK 5 - End the game 👈
+     let liveMosquitoes = document.querySelectorAll('[data-status=alive]');
+     if(!liveMosquitoes.length){
+     let elapsed = getTimeElapsed()
+     document.querySelector('p.info').textContent =
+     `Extermination completed in ${elapsed / 1000} seconds!`
+
+     let restartBtn = document.createElement('button');
+     restartBtn.textContent = "Restart"
+     restartBtn.addEventListener('click', () => {
+      location.reload()
+      
+     })
+     document.querySelector('h2').insertAdjacentElement('beforeend', restartBtn);
+     
+     }
+
+    }
   })
   // 👆 WORK WORK ABOVE THIS LINE 👆
 }
